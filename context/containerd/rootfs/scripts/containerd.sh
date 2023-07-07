@@ -18,6 +18,17 @@ scripts_path=$(cd `dirname "$0"`; pwd)
 
 set -e;set -x
 
+utils_get_distribution() {
+  lsb_dist=""
+  # Every system that we officially support has /etc/os-release
+  if [ -r /etc/os-release ]; then
+    lsb_dist="$(. /etc/os-release && echo "$ID")"
+  fi
+  # Returning an empty string here should be alright since the
+  # case statements don't act unless you provide an actual value
+  echo "$lsb_dist"
+}
+
 # get params
 storage=${ContainerDataRoot:-/var/lib/containerd} # containerd default uses /var/lib/containerd
 mkdir -p "$storage"
